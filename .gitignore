@@ -1,0 +1,1 @@
+.venv/\n__pycache__/\n*.py[cod]\ninstance/\n*.db\n.env\n
