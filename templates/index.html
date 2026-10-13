@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>URL Shortener</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body><main class="container"><section class="card"><p class="eyebrow">PYTHON • FLASK • SQLITE</p>
+<h1>Make long links <span>shorter.</span></h1><p class="muted">Create a compact link and redirect visitors to the original destination.</p>
+<form method="post"><label for="url">Paste your long URL</label><div class="row">
+<input id="url" name="url" type="url" placeholder="https://example.com/long/link" required value="{{ request.form.get('url','') }}">
+<button type="submit">Shorten URL</button></div></form>
+{% with messages = get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<p class="message {{ category }}">{{ message }}</p>{% endfor %}{% endwith %}
+{% if short_url %}<div class="result"><div><small>Your shortened URL</small><br><a id="shortUrl" href="{{ short_url }}">{{ short_url }}</a></div>
+<button type="button" class="secondary" onclick="copyShortUrl()">Copy link</button></div>{% endif %}</section>
+<section class="card"><h2>Recent URL history</h2>{% if recent_urls %}<div class="tablewrap"><table><thead><tr><th>Original URL</th><th>Code</th><th>Visits</th><th>Created</th></tr></thead><tbody>
+{% for item in recent_urls %}<tr><td class="original">{{ item.original_url }}</td><td><a href="{{ url_for('visit',code=item.short_code) }}">{{ item.short_code }}</a></td><td>{{ item.click_count }}</td><td>{{ item.created_at.strftime('%d %b %Y %H:%M') if item.created_at else '—' }}</td></tr>{% endfor %}
+</tbody></table></div>{% else %}<p class="muted">Your links will appear here.</p>{% endif %}</section><footer>Academic project prototype</footer></main>
+<script>function copyShortUrl(){const a=document.getElementById('shortUrl');if(a)navigator.clipboard.writeText(a.href).then(()=>alert('Short URL copied.'));}</script></body></html>
